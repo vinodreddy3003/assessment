@@ -21,7 +21,7 @@ const Assessment = ({ questions }) => {
             answer
                 ? {
                       ...prev,
-                      score: prev.score + 1,
+                      score: prev.score + 5,
                       correctAnswers: prev.correctAnswers + 1,
                   }
                 : {
@@ -38,11 +38,17 @@ const Assessment = ({ questions }) => {
         }
     };
 
+    const onClickPrevious = () => {
+        if (currentQuestion > 0) {
+            setCurrentQuestion((prev) => prev - 1);
+        }
+    };
+
     return (
         <div className="assessment-container">
             {!showResult ? (
                 <>
-                    <span className="active-question-no">Question{currentQuestion + 1}</span>
+                    <span className="active-question-no">Q{currentQuestion + 1}</span>
                     <span className="total-question">/{questions.length}</span>
                     <h2>{question}</h2>
                     <ul>
@@ -57,6 +63,12 @@ const Assessment = ({ questions }) => {
                         ))}
                     </ul>
                     <div className="footer">
+                        <button
+                            onClick={onClickPrevious}
+                            disabled={currentQuestion === 0}
+                        >
+                            Previous
+                        </button>
                         <button onClick={onClickNext} disabled={answerInd === null}>
                             {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
                         </button>
