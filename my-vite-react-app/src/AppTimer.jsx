@@ -43,8 +43,12 @@ function AppTimer({ duration, onTimeUp }) {
           className="progress"
         ></div>
       </div>
+      <div className="timer-display">
+        {duration - counter} seconds remaining
+      </div>
     </div>
   );
 }
 
 export default AppTimer;
+

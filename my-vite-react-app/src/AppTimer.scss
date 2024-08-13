@@ -1,6 +1,6 @@
 .question-tab {
     position: relative;
-    padding-top: 40px; /* Add padding at the top for the timer */
+    padding-top: 60px; /* Increased padding to accommodate timer text */
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -33,5 +33,13 @@
     width: 0;
     transition-timing-function: linear;
     border-radius: 5px;
+  }
+  
+  .timer-display {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
   }
   

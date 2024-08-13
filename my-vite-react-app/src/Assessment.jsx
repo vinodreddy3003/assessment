@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { resultInitalState } from "./constants";
-import AppTimer from "../AppTimer";
+import AppTimer from "./AppTimer";
 
 const Assessment = ({ questions }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -55,7 +55,7 @@ const Assessment = ({ questions }) => {
         <div className="assessment-container">
             {!showResult ? (
                 <>
-                {showAnswerTimer &&< AppTimer duration={10} onTimeUp={handleTimeUp}/>}
+                {showAnswerTimer &&< AppTimer duration={15} onTimeUp={handleTimeUp}/>}
                     <span className="active-question-no">Q{currentQuestion + 1}</span>
                     <span className="total-question">/{questions.length}</span>
                     <h2>{question}</h2>
