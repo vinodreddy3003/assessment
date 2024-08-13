@@ -7,6 +7,7 @@ body{
   display: flex;
   justify-content: center;
   height: 100vh;
+
 }
 
 .assessment-container{
@@ -16,6 +17,7 @@ body{
   margin-top: 50px;
   padding: 70px 90px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .active-question-no{
@@ -62,7 +64,7 @@ li{
 
 .footer{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 button{
@@ -74,8 +76,7 @@ button{
   color: black;
   font-size: 18px;
   outline: none;
-  border: none;
-  flex: 1; 
+  border: none; 
   margin: 4px 7px; 
 }
 

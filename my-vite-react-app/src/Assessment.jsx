@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { resultInitalState } from "./constants";
+import AppTimer from "../AppTimer";
 
 const Assessment = ({ questions }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -7,6 +8,7 @@ const Assessment = ({ questions }) => {
     const [answer, setAnswer] = useState(null);
     const [result, setResult] = useState(resultInitalState);
     const [showResult, setShowResult] = useState(false);
+    const [showAnswerTimer,setShowAnswerTimer]=useState(true);
 
     const { question, choices, correctAnswer } = questions[currentQuestion];
 
@@ -15,13 +17,14 @@ const Assessment = ({ questions }) => {
         setAnswer(answer === correctAnswer);
     };
 
-    const onClickNext = () => {
+    const onClickNext = (finalAnswer) => {
         setAnswerInd(null);
+        setShowAnswerTimer(false);
         setResult((prev) =>
-            answer
+            finalAnswer 
                 ? {
                       ...prev,
-                      score: prev.score + 5,
+                      score: prev.score + 1,
                       correctAnswers: prev.correctAnswers + 1,
                   }
                 : {
@@ -36,18 +39,23 @@ const Assessment = ({ questions }) => {
             setCurrentQuestion(0);
             setShowResult(true);
         }
+        setTimeout(() =>{
+           setShowAnswerTimer(true); 
+        });
     };
 
-    const onClickPrevious = () => {
-        if (currentQuestion > 0) {
-            setCurrentQuestion((prev) => prev - 1);
-        }
-    };
+
+
+    const handleTimeUp = () => {
+        setAnswer(false);
+        onClickNext(false);
+      };
 
     return (
         <div className="assessment-container">
             {!showResult ? (
                 <>
+                {showAnswerTimer &&< AppTimer duration={10} onTimeUp={handleTimeUp}/>}
                     <span className="active-question-no">Q{currentQuestion + 1}</span>
                     <span className="total-question">/{questions.length}</span>
                     <h2>{question}</h2>
@@ -63,13 +71,8 @@ const Assessment = ({ questions }) => {
                         ))}
                     </ul>
                     <div className="footer">
-                        <button
-                            onClick={onClickPrevious}
-                            disabled={currentQuestion === 0}
-                        >
-                            Previous
-                        </button>
-                        <button onClick={onClickNext} disabled={answerInd === null}>
+                       
+                        <button onClick={() => onClickNext(answer)} disabled={answerInd === null}>
                             {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
                         </button>
                     </div>
