@@ -43,6 +43,11 @@ const Assessment = ({ questions }) => {
            setShowAnswerTimer(true); 
         });
     };
+    const onTryAgain = () => {
+        setResult(resultInitalState);
+        setShowResult(false);
+      };
+    
 
 
 
@@ -83,6 +88,7 @@ const Assessment = ({ questions }) => {
                     <p>Score: {result.score}</p>
                     <p>Correct Answers: {result.correctAnswers}</p>
                     <p>Wrong Answers: {result.wrongAnswers}</p>
+                    <button onClick={onTryAgain}>Try again</button>
                 </div>
             )}
         </div>
