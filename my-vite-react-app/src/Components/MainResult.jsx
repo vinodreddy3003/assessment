@@ -2,6 +2,7 @@
 import React from 'react';
 import PieQ from './PieQ';
 import Result from './Result';
+import './MainResult.css';
 
 const MainResult = ({ result }) => {
   return (
