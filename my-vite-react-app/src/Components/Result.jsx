@@ -22,3 +22,5 @@ const Result = ({ total, correct, wrong }) => {
 };
 
 export default Result;
+
+

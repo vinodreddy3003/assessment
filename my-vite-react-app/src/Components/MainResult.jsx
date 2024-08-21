@@ -4,16 +4,18 @@ import PieQ from './PieQ';
 import Result from './Result';
 import './MainResult.css';
 
-const MainResult = ({ result }) => {
+const MainResult = ({ correctAnswers, wrongAnswers }) => {
+  const total = correctAnswers + wrongAnswers;
+
   return (
     <div>
       <h1 className='main-result'>Quiz Results</h1>
       <Result
-        total={ result.correctAnswers+result.wrongAnswers}
-        correct={result.correctAnswers}
-        wrong={result.wrongAnswers}
+        total={total}
+        correct={correctAnswers}
+        wrong={wrongAnswers}
       />
-      <PieQ correct={result.correctAnswers} wrong={result.wrongAnswers} />
+      <PieQ correct={correctAnswers} wrong={wrongAnswers} />
     </div>
   );
 };

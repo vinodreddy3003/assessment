@@ -1,6 +1,4 @@
-
 import React, { useState } from "react";
-import { resultInitalState } from "../constants.json";
 import quizData from "../constants.json";
 import "./Assessment.css";
 import Question from "./Question";
@@ -9,34 +7,37 @@ import MainResult from "./MainResult";
 
 const Assessment = ({ questions }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answerInd, setAnswerInd] = useState(null);
-  const [answer, setAnswer] = useState(null);
-  const [result, setResult] = useState(resultInitalState);
+  const [answerInd, setAnswerInd] = useState(Array(questions.length).fill(null)); // Store selected answers for all questions
+  const [results, setResults] = useState(questions.map(() => null));
   const [showResult, setShowResult] = useState(false);
+  const [reviewedQuestions, setReviewedQuestions] = useState(
+    questions.map(() => false)
+  );
 
   const { question, choices, correctAnswer } = questions[currentQuestion];
 
   const onAnswerClick = (answer, index) => {
-    setAnswerInd(index);
-    setAnswer(answer === correctAnswer);
+    setAnswerInd((prev) => {
+      const updatedAnswers = [...prev];
+      updatedAnswers[currentQuestion] = index;
+      return updatedAnswers;
+    });
+
+    setResults((prevResults) => {
+      const updatedResults = [...prevResults];
+      updatedResults[currentQuestion] = answer === correctAnswer;
+      return updatedResults;
+    });
+  };
+
+  const onClickPrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((prev) => prev - 1);
+    }
   };
 
   const onClickNext = () => {
-    setAnswerInd(null);
-    setResult((prev) =>
-      answer
-        ? {
-            ...prev,
-            score: prev.score + 1,
-            correctAnswers: prev.correctAnswers + 1,
-          }
-        : {
-            ...prev,
-            wrongAnswers: prev.wrongAnswers + 1,
-          }
-    );
-
-    if (currentQuestion !== questions.length - 1) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
       setShowResult(true);
@@ -45,17 +46,28 @@ const Assessment = ({ questions }) => {
 
   const onQuestionNumberClick = (index) => {
     setCurrentQuestion(index);
-    setAnswerInd(null);
   };
 
-  const handleTimeUp = () => {
-    setShowResult(true);
+  const toggleReviewQuestion = () => {
+    setReviewedQuestions((prev) => {
+      const updatedReviews = [...prev];
+      updatedReviews[currentQuestion] = !updatedReviews[currentQuestion];
+      return updatedReviews;
+    });
   };
+
+  const totalScore = results.filter(Boolean).length;
+  const correctAnswers = results.filter((result) => result === true).length;
+  const wrongAnswers = results.filter((result) => result === false).length;
 
   if (showResult) {
     return (
       <div className="">
-        <MainResult result={result} />
+        <MainResult
+          score={totalScore}
+          correctAnswers={correctAnswers}
+          wrongAnswers={wrongAnswers}
+        />
       </div>
     );
   }
@@ -68,7 +80,6 @@ const Assessment = ({ questions }) => {
           <span className="exam-title">ASSESSMENT-1</span>
         </div>
         <div className="header-right">
-          
           <div className="user-profile">
             <img
               src="../src/Components/mspic.jpg"
@@ -79,7 +90,6 @@ const Assessment = ({ questions }) => {
         </div>
       </div>
 
-
       <div className="quiz-container">
         <div>
           <Question
@@ -89,7 +99,7 @@ const Assessment = ({ questions }) => {
         </div>
 
         <div className="assessment-container">
-        <AppTimer duration={300} onTimeUp={handleTimeUp} />
+          <AppTimer duration={300} onTimeUp={() => setShowResult(true)} />
           <span className="active-question-no">Question {currentQuestion + 1}</span>
           <span className="total-question">/{questions.length}</span>
           <h2>{question}</h2>
@@ -98,14 +108,20 @@ const Assessment = ({ questions }) => {
               <li
                 key={answer}
                 onClick={() => onAnswerClick(answer, index)}
-                className={answerInd === index ? "selected-answer" : null}
+                className={answerInd[currentQuestion] === index ? "selected-answer" : null}
               >
                 {answer}
               </li>
             ))}
           </ul>
           <div className="footer">
-            <button onClick={onClickNext} disabled={answerInd === null}>
+            <button onClick={toggleReviewQuestion} className="star-button">
+              {reviewedQuestions[currentQuestion] ? "⭐" : "☆"} Review
+            </button>
+            <button onClick={onClickPrevious} disabled={currentQuestion === 0}>
+              Previous
+            </button>
+            <button onClick={onClickNext} disabled={answerInd[currentQuestion] === null}>
               {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
             </button>
           </div>
@@ -116,4 +132,3 @@ const Assessment = ({ questions }) => {
 };
 
 export default Assessment;
-
